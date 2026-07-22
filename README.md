@@ -4,6 +4,12 @@ An end-to-end automated system for evaluating mental health and stress levels. P
 
 ---
 
+## 🎓 Project Type
+
+University Team Project
+
+---
+
 ## 📝 Try the Survey & Sample Result
 
 | 📲 Try the Survey (QR Code) | 📄 Sample Assessment Report |
@@ -54,8 +60,3 @@ This project delivers an automated **Mental Health & Stress Level Assessment Sys
                                             ▼
 [ Database Log ] ◄── [ Gmail API ] ◄── [ PDFShift API ] ◄── [ HTML Render ] ◄── [ JS Scoring Algorithm ]
 
-
----
-## Project Type
-
-University Team Project
