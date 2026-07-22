@@ -54,8 +54,8 @@ This project delivers an automated **Mental Health & Stress Level Assessment Sys
                                             ▼
 [ Database Log ] ◄── [ Gmail API ] ◄── [ PDFShift API ] ◄── [ HTML Render ] ◄── [ JS Scoring Algorithm ]
 
----
 
+---
 ## Project Type
 
 University Team Project
