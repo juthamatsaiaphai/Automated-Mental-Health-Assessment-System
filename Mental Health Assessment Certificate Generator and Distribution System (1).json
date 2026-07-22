@@ -1,0 +1,518 @@
+{
+  "name": "Mental Health Assessment Certificate Generator and Distribution System",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1-pBT7eiXRKFRTyC12gDmy9g7phFow7IncVjKEy90d-0",
+          "mode": "list",
+          "cachedResultName": "MentalHealth_Responses",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-pBT7eiXRKFRTyC12gDmy9g7phFow7IncVjKEy90d-0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 838740912,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-pBT7eiXRKFRTyC12gDmy9g7phFow7IncVjKEy90d-0/edit#gid=838740912"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "id": "75ba3d2d-ba71-4303-8101-305cf5310fb3",
+      "name": "เมื่อมีการส่ง Form",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        320
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "P2RvconvrTryDhsR",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json[\"E-mail \"] }}",
+        "subject": "=💌 สรุปผลสำรวจสุขภาพใจของคุณ พร้อมข้อแนะนำการดูแลตัวเอง",
+        "emailType": "text",
+        "message": "=สวัสดีคุณ {{ $json.FullName }}\nขอบคุณที่อนุญาตให้ตัวเองได้หยุดพัก ทบทวนความรู้สึก และทำแบบสำรวจสุขภาพใจกับเราในวันนี้นะคะ 🌻\nเราได้แนบ \"บันทึกสรุปสุขภาพใจ\" พร้อมข้อแนะนำเล็กๆ น้อยๆ ที่ออกแบบมาเพื่อคุณโดยเฉพาะมาในอีเมลฉบับนี้ (ในไฟล์ PDF แนบ) ลองเปิดอ่านดูนะ\nไม่ว่าผลประเมินวันนี้จะออกมาเป็นอย่างไร ขอให้จำไว้ว่าการกล้าที่จะรับรู้ความรู้สึกของตัวเอง คือก้าวแรกที่ยอดเยี่ยมที่สุดของการดูแลหัวใจตัวเองแล้วนะคะ ขอให้วันนี้เป็นวันที่ใจดีกับคุณนะ 💙\nด้วยความห่วงใย,\n\n\n",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "id": "e5e438f9-a89d-4dcc-907a-e8fb0358200f",
+      "name": "ส่งอีเมลพร้อมใบประกาศ",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -144,
+        96
+      ],
+      "webhookId": "9ab04be9-1f83-42ff-8388-14f447ba79a9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "n7OmGbMVZrhof8t7",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "certificateId",
+              "value": "={{ $json.certificateId }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "name",
+              "value": "={{ $json.name || $json.ชื่อ }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "email",
+              "value": "={{ $json.email || $json.อีเมล }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "totalScore",
+              "value": "={{ $json.totalScore }}",
+              "type": "number"
+            },
+            {
+              "id": "id-5",
+              "name": "level",
+              "value": "={{ $json.level }}",
+              "type": "string"
+            },
+            {
+              "id": "id-6",
+              "name": "issueDate",
+              "value": "={{ $json.issueDate }}",
+              "type": "string"
+            },
+            {
+              "id": "id-7",
+              "name": "timestamp",
+              "value": "={{ $json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b075d728-7269-408a-8c44-e0b15a329efa",
+      "name": "เตรียมข้อมูลสำหรับ Log",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "options": {}
+      },
+      "id": "5609d487-0871-4aa7-a482-6ea2a2f9fce2",
+      "name": "บันทึก Log ลงฐานข้อมูล",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"UTF-8\">\n<style>\n@page {\n  size: A4;\n  margin: 0;\n}\n\nhtml, body {\n  margin: 0;\n  padding: 0;\n  font-family: 'TH Sarabun New', 'Kanit', 'Prompt', 'Segoe UI', Arial, sans-serif;\n  background: #ffffff;\n}\n\n/* ================= MAIN CONTAINER ================= */\n.container {\n  position: relative;\n  width: 210mm;\n  height: 297mm;\n  padding: 15mm 20mm; /* ลดขอบเพื่อเพิ่มพื้นที่ */\n  box-sizing: border-box;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n/* ขอบทอง */\n.container::before {\n  content: \"\";\n  position: absolute;\n  top: 10mm;\n  left: 10mm;\n  right: 10mm;\n  bottom: 10mm;\n  border: 1.5px solid #d4af37;\n  pointer-events: none;\n  z-index: 1;\n}\n\n.top-accent {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: 8px;\n  background: linear-gradient(to right, #b8860b, {{ $json.levelColor }}, #b8860b);\n  z-index: 2;\n}\n\n/* ================= HEADER ================= */\n.header {\n  text-align: center;\n  margin-top: 10mm;\n  margin-bottom: 5mm;\n  z-index: 3;\n}\n\nh1 {\n  font-size: 36px; \n  margin: 0;\n  color: #4b3621;\n  letter-spacing: 2px;\n}\n\n.subtitle {\n  font-size: 20px;\n  color: #8a6f2f;\n  margin-top: 5px;\n}\n\n/* ================= BODY ================= */\n.body-content {\n  text-align: center;\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  justify-content: flex-start; /* เปลี่ยนเป็นชิดบนเพื่อคุมระยะห่างเอง */\n  align-items: center;\n  z-index: 3;\n}\n\n.section-text {\n  font-size: 24px;\n  color: #666;\n  margin-top: 10px;\n}\n\n.name {\n  font-size: 42px;\n  font-weight: 700;\n  color: #1a1a1a;\n  border-bottom: 2px solid #e6d5a3;\n  padding: 0 30px 5px 30px;\n  margin: 10px 0;\n}\n\n.level-wrapper {\n  margin: 10px 0;\n}\n\n.level {\n  padding: 8px 30px;\n  font-size: 24px;\n  border-radius: 10px;\n  background: #fffdf7;\n  border: 1.5px solid #e6d5a3;\n  display: inline-block;\n}\n\n.level strong {\n  color: {{ $json.levelColor }};\n  font-size: 26px;\n}\n\n/* ================= ADVICE SECTION (ส่วนที่ล้นบ่อยที่สุด) ================= */\n.advice-box {\n  width: 95%; /* กว้างเกือบเต็มเพื่อลดจำนวนบรรทัด */\n  margin-top: 15px;\n  padding: 25px 30px;\n  box-sizing: border-box;\n  border-radius: 15px;\n  border: 1.5px solid {{ $json.levelColor }};\n  background-color: {{ $json.levelColor }}05;\n}\n\n.advice-title {\n  font-size: 22px;\n  font-weight: 600;\n  margin-bottom: 12px;\n  color: {{ $json.levelColor }};\n}\n\n.advice-content {\n  font-size: 21px; /* ลดขนาดลงเล็กน้อยเพื่อให้ใส่ข้อความยาวๆ ได้ */\n  line-height: 1.4;\n  color: #333;\n  text-align: center;\n}\n\n.advice-content em {\n  display: block;\n  margin-top: 12px;\n  font-size: 18px;\n  color: #666;\n  font-style: italic;\n  font-weight: normal;\n  line-height: 1.3;\n}\n\n/* ================= FOOTER ================= */\n.footer {\n  margin-top: auto; /* ดันลงล่างสุด */\n  padding-bottom: 10mm;\n  font-size: 16px;\n  color: #888;\n  display: flex;\n  justify-content: space-between;\n  width: 90%;\n  margin-left: auto;\n  margin-right: auto;\n  z-index: 3;\n}\n</style>\n</head>\n\n<body>\n<div class=\"container\">\n  <div class=\"top-accent\"></div>\n\n  <div class=\"header\">\n    <h1>Mental Health Assessment</h1>\n    <div class=\"subtitle\">Self-Love & Emotional Care</div>\n  </div>\n\n  <div class=\"body-content\">\n    <div class=\"section-text\">บันทึกสำรวจสุขภาพใจของ</div>\n    <div class=\"name\">{{ $json.FullName }}</div>\n\n    <div class=\"level-wrapper\">\n      <div class=\"level\">\n        ระดับความกังวล: <strong>{{ $json.level }}</strong>\n      </div>\n    </div>\n\n    <div class=\"advice-box\">\n      <div class=\"advice-title\">คำแนะนำเพื่อการรักและดูแลตนเอง</div>\n      <div class=\"advice-content\">\n        {{ $json.advice }}\n        <em>{{ $json.adviceEN }}</em>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"footer\">\n    <div style=\"font-weight: bold; color: #d4af37;\">OFFICIAL REPORT</div>\n    <div>Issue Date: {{ $json.issueDate }}</div>\n  </div>\n</div>\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -816,
+        304
+      ],
+      "id": "38289a48-b17e-481d-96ef-49d33c143900",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "65303e7b-c0e8-414c-a020-425fe9c8a597"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1056,
+        320
+      ],
+      "id": "68bd98a1-fb49-47a5-8018-39a2d4dc9e5c",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -384,
+        96
+      ],
+      "id": "b6992073-d462-41f4-9178-14c7c505b066",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pdfshift.io/v3/convert/pdf",
+        "sendHeaders": true,
+        "specifyHeaders": "=keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "sk_a6e6b3c007bf949dec7897a3b6129ff7954a7cf3"
+            },
+            {
+              "name": " Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/pdf"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "={{$json.html}}"
+            },
+            {
+              "name": "format",
+              "value": "A4"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -624,
+        256
+      ],
+      "id": "3f11607e-c648-4c4d-b5d9-321aa410f4d5",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "content": "## เมื่อมีการส่ง Form\nTrigger เมื่อมีผู้ใช้กรอก Google Form \nระบบจะรับข้อมูลผู้กรอก เช่น ชื่อ อีเมล และผลประเมิน\nเพื่อส่งต่อไปยังขั้นตอนสร้าง Assessment Record",
+        "height": 176,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1632,
+        112
+      ],
+      "id": "d6229b46-c04d-4408-bba3-ffdc29c53d9a",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## สร้าง Assessment Result ID \nสร้างรหัส Assessment Result  แบบไม่ซ้ำ เพื่อใช้เป็นหมายเลขอ้างอิงของใบบันทึกการประเมิน",
+        "color": "#FF990A"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1296,
+        128
+      ],
+      "id": "da5eb248-d95c-4f27-9cd3-2b16bf6db1e2",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Switch\nตรวจสอบเงื่อนไขของผลประเมิน\nเพื่อแยกการทำงานของ Workflow ตามเงื่อนไขที่กำหนด",
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1104,
+        512
+      ],
+      "id": "4fddcc39-f448-4595-926e-ba17dc92917e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## HTML\nสร้าง Template HTML ของใบ Assessment Result\nโดยดึงข้อมูลจาก Form มาใส่ในใบบันทึกการประเมิน",
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        464
+      ],
+      "id": "770a82f9-8b8b-49c1-acce-20cc42847923",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## HTTP Request \nส่ง HTML ไปยัง API เพื่อแปลงเป็นไฟล์ PDF\nสำหรับใช้เป็น Assessment Result",
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        288
+      ],
+      "id": "705ae5f6-a0cf-44aa-a3c7-39b61ffb4617",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Merge\nรวมข้อมูลจากหลาย Node\nเช่น ข้อมูลผู้ใช้ + ไฟล์ PDF Assessment Resultเพื่อเตรียมส่งอีเมล",
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -80
+      ],
+      "id": "50a86b2e-c5f7-4f06-b3ca-a2b556b67c46",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## ส่งอีเมลพร้อม Assessment ID\nส่งอีเมลไปยังผู้ทำแบบประเมิน\nโดยแนบไฟล์ PDF Assessment Resultไปด้วย",
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        272
+      ],
+      "id": "c1e65656-6f9e-4372-8418-c585a6d40fe7",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## เขียนข้อมูลลง Log\nบันทึกข้อมูลการส่งAssessment Result เช่น ชื่อ อีเมล และ Assessment Result IDเพื่อใช้ตรวจสอบย้อนหลัง",
+        "color": "#9CC1E8"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -32
+      ],
+      "id": "e09392c0-041b-4ded-8d9b-9cfb9cf6e6b2",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## บันทึก Log ลงฐานข้อมูล\nเก็บข้อมูล Log ลงใน Google Sheet / Database\nเพื่อใช้ติดตามการออก Assessment Result"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        304,
+        352
+      ],
+      "id": "9a1b0194-f6f6-49c9-84ef-374ba6ec8358",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// ==========================\n// รวมคะแนนข้อ 1–5 และ 8\n// ==========================\nlet totalScore = 0;\n\nObject.keys($json).forEach(key => {\n  if (/^(1\\.|2\\.|3\\.|4\\.|5\\.|8\\.)/.test(key)) {\n    totalScore += parseInt($json[key]) || 0;\n  }\n});\n\n\n// ==========================\n// แปลงค่า Yes/No (ข้อ 6–7)\n// ==========================\nObject.keys($json).forEach(key => {\n\n  if (/^6\\./.test(key) && $json[key] === \"ใช่\") {\n    totalScore += 2;\n  }\n\n  if (/^7\\./.test(key) && $json[key] === \"ใช่\") {\n    totalScore += 2;\n  }\n\n});\n\n\n// ==========================\n// ประเมินระดับ\n// ==========================\nlet level = \"\";\nlet levelColor = \"\";\nlet riskNote = \"\";\n\nif (totalScore >= 20) {\n  level = \"ควรได้รับการประเมินเพิ่มเติมโดยผู้เชี่ยวชาญ\";\n  levelColor = \"#D32F2F\";\n  riskNote = \"ควรได้รับการประเมินเพิ่มเติมโดยผู้เชี่ยวชาญ\";\n} \nelse if (totalScore >= 12) {\n  level = \"ควรเฝ้าระวังและดูแลตนเอง\";\n  levelColor = \"#F57C00\";\n  riskNote = \"ควรเฝ้าระวังและดูแลตนเอง\";\n} \nelse {\n  level = \"อยู่ในเกณฑ์ปกติ\";\n  levelColor = \"#2E7D32\";\n  riskNote = \"อยู่ในเกณฑ์ปกติ\";\n}\n\n\n// ==========================\n// คำแนะนำ (เพิ่มภาษาอังกฤษ)\n// ==========================\nlet advice = \"\";\nlet adviceEN = \"\";\n\nif (level === \"อยู่ในเกณฑ์ปกติ\") {\n\n  advice = \"ตอนนี้สภาพจิตใจของคุณถือว่ามีความสมดุลและแข็งแรงดีมากครับ เปรียบเหมือนต้นไม้ที่ได้รับน้ำและแสงแดดเพียงพอ สิ่งที่คุณควรทำคือรักษาความสม่ำเสมอในการดูแลตัวเอง (Self-care) ต่อไป ลองหาเวลาขอบคุณเรื่องราวดีๆ เล็กๆ น้อยๆ ในแต่ละวันเพื่อสะสมพลังบวก และเป็นกำลังใจให้คนรอบข้างในวันที่เขาเหนื่อยล้าครับ\";\n\n  adviceEN = \"Your mental health currently appears balanced and strong. Like a tree receiving sufficient sunlight and water, you are growing well. Continue maintaining consistent self-care habits. Take time to appreciate small positive moments each day and offer encouragement to those around you when they feel tired.\";\n} \nelse if (level === \"ควรเฝ้าระวังและดูแลตนเอง\") {\n\n  advice = \"ระดับนี้ใจของคุณเริ่มส่งสัญญาณเตือนว่า เริ่มเหนื่อยแล้วนะ หรือมีเรื่องให้ต้องคิดมากเกินไปหน่อย วิธีฮีลใจที่ดีที่สุดคือการอนุญาตให้ตัวเองได้ หยุดพัก จริงๆ ครับ ลองวางมือถือลดการรับรู้ข่าวสาร (Digital Detox) แล้วกลับไปทำกิจกรรมที่เคยทำให้คุณมีความสุข เช่น ฟังเพลง วาดรูป หรือกินของอร่อย หากรู้สึกอึดอัด การเขียนระบายความรู้สึกออกมาหรือหาคนที่ไว้ใจได้สักคนเพื่อพูดคุยจะช่วยลดความตึงเครียดในใจลงได้มากครับ\";\n\n  adviceEN = \"Your mind may be showing early signs of fatigue or emotional overload. The best way to heal is to allow yourself genuine rest. Try reducing digital exposure and return to activities that once brought you joy, such as listening to music, drawing, or enjoying your favorite food. Writing down your feelings or talking to someone you trust can greatly reduce emotional tension.\";\n} \nelse {\n\n  advice = \"หากคะแนนมาถึงเกณฑ์นี้ แสดงว่าพายุในใจคุณค่อนข้างหนักและอาจส่งผลกระทบต่อการใช้ชีวิตประจำวันแล้วครับ สิ่งแรกที่อยากบอกคือ คุณเก่งมากแล้วที่อดทนมาได้ถึงขนาดนี้ การขอความช่วยเหลือไม่ใช่เครื่องหมายของความอ่อนแอ แต่คือความกล้าหาญที่จะดูแลตัวเองครับ แนะนำให้หาเวลาปรึกษาผู้เชี่ยวชาญ เช่น นักจิตวิทยา หรือจิตแพทย์ เพื่อรับคำแนะนำที่ถูกต้องและตรงจุด หรือหากยังไม่สะดวก สามารถโทรสายด่วนสุขภาพจิต 1323 ได้ตลอด 24 ชั่วโมง เพื่อให้มีคนช่วยประคองใจในเบื้องต้นครับ\";\n\n  adviceEN = \"If your score falls within this range, it may indicate significant emotional distress that could be affecting your daily life. First, recognize your strength in enduring this situation. Seeking help is not a sign of weakness, but an act of courage and self-care. Consider consulting a psychologist or psychiatrist for proper guidance. If immediate support is needed, you may contact the Mental Health Hotline (1323), available 24 hours a day.\";\n}\n\n\n// ==========================\n// Certificate\n// ==========================\nconst certificateId = \"MH-\" + Date.now();\nconst issueDate = new Date().toLocaleDateString(\"th-TH\");\n\n\n// ==========================\n// ส่งออกผลลัพธ์\n// ==========================\nreturn {\n  ...$json,\n  totalScore,\n  level,\n  levelColor,\n  riskNote,\n  certificateId,\n  issueDate,\n  advice,\n  adviceEN\n};"
+      },
+      "id": "c8c9ab08-7be8-4a07-bad0-e3d9a741055f",
+      "name": "คำนวณระดับความเคียดจากแบบประเมิน และ สร้าง Assessment ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        320
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "เมื่อมีการส่ง Form": {
+      "main": [
+        [
+          {
+            "node": "คำนวณระดับความเคียดจากแบบประเมิน และ สร้าง Assessment ID",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ส่งอีเมลพร้อมใบประกาศ": {
+      "main": [
+        [
+          {
+            "node": "เตรียมข้อมูลสำหรับ Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "เตรียมข้อมูลสำหรับ Log": {
+      "main": [
+        [
+          {
+            "node": "บันทึก Log ลงฐานข้อมูล",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "ส่งอีเมลพร้อมใบประกาศ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "คำนวณระดับความเคียดจากแบบประเมิน และ สร้าง Assessment ID": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "594f62e0-ce9c-4bfd-b0d8-14341e587987",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cb12696e840980e67a141f4f3f8ed691f0680784da2a6daf0727559c75addcd3"
+  },
+  "id": "QVaQOXBsT7hRz1GG",
+  "tags": []
+}
